@@ -1,7 +1,7 @@
 SITA.Marker = function() {
 	
 
-	$.get("/mock/markerMapMock.json", function(schoolRecordsData){
+	$.get("/pinMap", function(schoolRecordsData){
 		console.log("inside sita");
 		var marker;
 		var mapOptions = {
@@ -54,7 +54,7 @@ function getHtmlOutputForSchool(school){
 
 	var s =   '</div>'+
 		      '<h4 id="firstHeading" class="firstHeading">' + school.schoolName + '</h4>'+
-		      '<table cellspacing="10"><tr><th> </th><th>Open&nbsp;&nbsp;</th><th>Close</th></tr>'+
+		      '<table cellspacing="10"><tr><th> </th><th>Open&nbsp;&nbsp;</th><th>Resolved</th></tr>'+
 		      '<tr><td>Barrier-free Access</td> <td> '+ school.barrier.open +' </td><td> '+ school.barrier.close +' </td></tr>'+ 
 		      '<tr><td>Toilets</td> <td> '+ school.toilets.open +' </td><td> '+ school.toilets.close +' </td></tr>'+ 
 		      '<tr><td>Drinking Water</td> <td> '+ school.drinkingWater.open +' </td><td> '+ school.drinkingWater.close +' </td></tr>'+ 
