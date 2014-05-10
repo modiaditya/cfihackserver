@@ -1,0 +1,8 @@
+{
+	"schoolRecords": [
+	{"lat":"21.737095", "lng":"70.297112", "schoolName": "Abc"},
+	{"lat":"21.486322", "lng":"70.953097", "schoolName": "XYZ"},
+	{"lat":"21.737095", "lng":"70.297112", "schoolName": "PQR"},
+	{"lat":"21.737095", "lng":"70.297112", "schoolName": "EFG"}
+	]
+}
