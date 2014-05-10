@@ -1,13 +1,20 @@
 SITA.Chart = function() {
 
+  var breadcrumbs = [];
+
   var refreshChart = function(type, name, subtype) {
 
-    //TODO: /chart?type=state&name=gujarat&subtype=district
-    $.get( "/mock/chartmock.json", function(data) {
+    // var url = "/mock/chartmock.json";
+    var url = 'chart?typeKey=' + type + '&typeValue=' + name + '&subType=' + subtype;
+    $.get(url, function(data) {
+      breadcrumbs.push(data.name);
+
+      // POPULATE CHART
       var chartUtil = new SITA.ChartUtil();
       var chartData = chartUtil.parseDrilldown(data);
       $('#container').highcharts(chartData);
 
+      // TYPEAHEAD
       var subTypeEl = $('#subtype');
       subTypeEl.empty();
       subTypeEl.append('<input class="typeahead" type="text">');
@@ -19,10 +26,20 @@ SITA.Chart = function() {
         }
       });
 
+      // BREADCRUMBS
+      var breadCrumbEl = '';
+      for (var i in breadcrumbs) {
+        breadCrumbEl += breadcrumbs[i];
+          if (i < (breadcrumbs.length-1)) {
+            breadCrumbEl += ' > ';
+          }
+      }
+      $('#breadcrumbs').html(breadCrumbEl);
+
     });
 
   }
 
-  refreshChart();
+  refreshChart('state', 'GUJRAT', 'districtName');
 
 }

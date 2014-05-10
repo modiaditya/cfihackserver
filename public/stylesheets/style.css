@@ -40,7 +40,7 @@ a {
 }
 
 #subtype {
-    margin-top: 20px;
+    margin: 20px;
 }
 
 .typeahead {
@@ -54,4 +54,8 @@ a {
 	-moz-border-radius: 8px;
 	border-radius: 8px;
 	outline: none;
+}
+
+.breadcrumbs {
+	color: #dddddd;
 }
