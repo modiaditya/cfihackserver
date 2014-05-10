@@ -53,13 +53,13 @@ function getHtmlOutputForSchool(school){
 	// 						+'</div>'; 
 
 	var s =   '</div>'+
-		      '<h4 id="firstHeading" class="firstHeading">' + school.schoolName + '</h4>'+
+		      '<h4 id="firstHeading" class="firstHeading">' + school.name + '</h4>'+
 		      '<table cellspacing="10"><tr><th> </th><th>Open&nbsp;&nbsp;</th><th>Resolved</th></tr>'+
-		      '<tr><td>Barrier-free Access</td> <td> '+ school.barrier.open +' </td><td> '+ school.barrier.close +' </td></tr>'+ 
-		      '<tr><td>Toilets</td> <td> '+ school.toilets.open +' </td><td> '+ school.toilets.close +' </td></tr>'+ 
-		      '<tr><td>Drinking Water</td> <td> '+ school.drinkingWater.open +' </td><td> '+ school.drinkingWater.close +' </td></tr>'+ 
-		      '<tr><td>Playground</td> <td> '+ school.playground.open +' </td><td> '+ school.playground.close +' </td></tr>'+ 
-		      '<tr><td>Library</td> <td> '+ school.library.open +' </td><td> '+ school.library.close +' </td></tr>'+ 
+		      '<tr><td>Barrier-free Access</td> <td> '+ school.barrier.open +' </td><td> '+ school.barrier.resolved +' </td></tr>'+ 
+		      '<tr><td>Toilets</td> <td> '+ school.toilets.open +' </td><td> '+ school.toilets.resolved +' </td></tr>'+ 
+		      '<tr><td>Drinking Water</td> <td> '+ school.drinkingWater.open +' </td><td> '+ school.drinkingWater.resolved +' </td></tr>'+ 
+		      '<tr><td>Playground</td> <td> '+ school.playground.open +' </td><td> '+ school.playground.resolved +' </td></tr>'+ 
+		      '<tr><td>Library</td> <td> '+ school.library.open +' </td><td> '+ school.library.resolved +' </td></tr>'+ 
 		      '</table>'+
 		      '<p><a href="getSchool?id='+school.schoolCode+ '">'+
 		      'View detailed reports</a> </p>' +
