@@ -35,6 +35,7 @@ app.get('/report', backend.addReport);
 app.get('/chart', backend.aggregateByAType);
 app.get('/heatMap', backend.fetchHeatMapCoordinates);
 app.get('/pinMap', backend.fetchPinMapData);
+app.get('/school', backend.fetchSchoolData);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
