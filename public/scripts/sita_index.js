@@ -9,11 +9,13 @@ SITA.initMenu = function() {
   $('#map-link').click(function() {
     showSection('map-section');
     SITA.Map();
+    return false;
   });
 
   $('#chart-link').click(function() {
     showSection('chart-section');
     SITA.Chart();
+    return false;
   });
 
   showSection('map-section');
