@@ -23,6 +23,15 @@ var FACILITY_MAPPING = {
 	'5': 'Library'
 }
 
+var FE_FACILITY_MAPPING = {
+	'1': 'barrier',
+	'2': 'toilets',
+	'3': 'drinkingWater',
+	'4': 'playground',
+	'5': 'library'
+}
+
+
 Parse.initialize("3P4Yf9CyJU9up39DrDEvfxrEkBXFvqkTopkSJRNl", "002iMIHr3Ul7Ee9dv8B2QsHXHDZmOzatqds6tJIZ");
 
 exports.addReport = function(data, callback) {
@@ -182,31 +191,99 @@ exports.fetchHeatMapCoordinates = function(data, callback) {
 }
 
 
-exports.fetchPinMapData = function(data, callback) {	
+exports.fetchPinMapData = function(data, callback) {
+	var reportQuery = new Parse.Query(REPORT_TABLE);
+	reportQuery.find({
+		success: function(reports) {
+			var schoolMap = {};
+			for(var i = 0; i < reports.length; i++) {
+				var reportInstance = reports[i];
+				if(!(reportInstance.get(SCHOOL_CODE) in schoolMap)) {
+					schoolMap[reportInstance.get(SCHOOL_CODE)] = {};
+				}
+				var ref = schoolMap[reportInstance.get(SCHOOL_CODE)];
+				var facilityString = FE_FACILITY_MAPPING[reportInstance.get(FACILITY_NUMBER)];
+				if(!(facilityString in ref)) {
+					ref[facilityString] = {"open": 0, "resolved": 0};
+				}
+				if(reportInstance.get("status") == "OPEN") {
+					ref[facilityString]["open"] += 1;
+				} else {
+					ref[facilityString]["resolved"] += 1;
+				}
+			}
+			var schoolQuery = new Parse.Query(SCHOOL_TABLE);
+			schoolQuery.containedIn(SCHOOL_CODE, Object.keys(schoolMap));
+			schoolQuery.find({
+				success: function(schools) {
+					for(var i = 0; i < schools.length; i++) {
+						var schoolInstance = schools[i];
+						schoolMap[schoolInstance.get(SCHOOL_CODE)]["name"] = schoolInstance.get(SCHOOL_NAME);
+						schoolMap[schoolInstance.get(SCHOOL_CODE)]["schoolCode"] = schoolInstance.get(SCHOOL_CODE);
+						schoolMap[schoolInstance.get(SCHOOL_CODE)]["lat"] = schoolInstance.get(LATITUDE);
+						schoolMap[schoolInstance.get(SCHOOL_CODE)]["lng"] = schoolInstance.get(LONGITUDE);
+					};
+					var recordsToReturn = [];
+					for(var key in schoolMap) {
+						recordsToReturn.push(schoolMap[key]);
+					}
+					callback.send({"schoolRecords": recordsToReturn});
+				},
+				error: function(error) {
+					console.log("Report query failed in fetching pin data - " + error.message);					
+				}
+		});
+		},
+		error: function(error) {
+			console.log("Report query failed in fetching pin data - " + error.message);
+		}
+	});
+}
+
+
+exports.fetchPinMapDataOld = function(data, callback) {	
 	var schoolQuery = new Parse.Query(SCHOOL_TABLE);
 	schoolQuery.find({
 		success: function(schools) {
 			var schoolMap = {};
 			for(var i = 0; i < schools.length; i++) {
 				var schoolInstance = schools[i];
-				schoolMap[schoolInstance.get(SCHOOL_CODE)] = {"name" : schoolInstance.get(SCHOOL_NAME)};
+				schoolMap[schoolInstance.get(SCHOOL_CODE)] = {
+					"name" : schoolInstance.get(SCHOOL_NAME),
+					"schoolCode" : schoolInstance.get(SCHOOL_CODE),
+					"lat": schoolInstance.get(LATITUDE),
+					"lng": schoolInstance.get(LONGITUDE)
+				};
 			}
 
 			var reportQuery = new Parse.Query(REPORT_TABLE);
 			reportQuery.find({
 				success: function(reports) {
+					var arrayToReturn = [];
 					for(var i = 0; i < reports.length; i++) {
 						var reportInstance = reports[i];
-						if(SCHOOL_CODE in reportInstance) {
-							var ref = schoolMap[reportInstance.get(SCHOOL_CODE)];
-
+						var ref = schoolMap[reportInstance.get(SCHOOL_CODE)];
+						console.log("Ref is " + ref);
+						var facilityString = FE_FACILITY_MAPPING[reportInstance.get(FACILITY_NUMBER)];
+						if(!(facilityString in ref)) {
+							ref[facilityString] = {"open": 0, "resolved": 0};
 						}
+						if(reportInstance.get("status") == "OPEN") {
+							ref[facilityString]["open"] += 1;
+						} else {
+							ref[facilityString]["resolved"] += 1;
+						}
+						arrayToReturn.push(ref);
 					}
+					callback.send(schoolMap);
+				},
+				error: function(error) {
+					console.log("Report query failed in fetching pin data - " + error.message);
 				}
 			});
 		},
 		error: function(error) {
-
+			console.log("Error in fetching pin data - " + error.message);
 		}
 	});
 }
