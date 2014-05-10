@@ -10,6 +10,9 @@ var SCHOOL_CODE = 'schoolCode';
 var LATITUDE = 'latitude';
 var LONGITUDE = 'longitude';
 
+var TRUE = 'true';
+var FALSE = 'false';
+
 var FACILITY_MAPPING = {
 	'1': 'Barrier-free Access',
 	'2': 'Toilets',
@@ -121,15 +124,15 @@ exports.fetchHeatMapCoordinates = function(data, callback) {
 	var Report = Parse.Object.extend(REPORT_TABLE);
 	var reportQuery = new Parse.Query(REPORT_TABLE);
 	var facilities = [];
-	if(data.query.barrier)
+	if(data.query.barrier == TRUE)
 		facilities.push(1);
-	if(data.query.toilets)
+	if(data.query.toilets == TRUE)
 		facilities.push(2);
-	if(data.query.drinkingWater)
+	if(data.query.drinkingWater == TRUE)
 		facilities.push(3);
-	if(data.query.playground)
+	if(data.query.playground == TRUE)
 		facilities.push(4);
-	if(data.query.library)
+	if(data.query.library == TRUE)
 		facilities.push(5);
 
 	reportQuery.containedIn(FACILITY_NUMBER, facilities);
