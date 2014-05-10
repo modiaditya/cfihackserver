@@ -7,6 +7,8 @@ var SCHOOL_TABLE = "school";
 var FACILITY_NUMBER = 'facilityNumber';
 var PARAMETER_NUMBER = 'parameterNumber';
 var SCHOOL_CODE = 'schoolCode';
+var SCHOOL_NAME = 'schoolName';
+
 var LATITUDE = 'latitude';
 var LONGITUDE = 'longitude';
 
@@ -120,7 +122,6 @@ exports.aggregateByAType = function(data, callback) {
 
 
 exports.fetchHeatMapCoordinates = function(data, callback) {
-
 	var Report = Parse.Object.extend(REPORT_TABLE);
 	var reportQuery = new Parse.Query(REPORT_TABLE);
 	var facilities = [];
@@ -134,36 +135,78 @@ exports.fetchHeatMapCoordinates = function(data, callback) {
 		facilities.push(4);
 	if(data.query.library == TRUE)
 		facilities.push(5);
-
-	reportQuery.containedIn(FACILITY_NUMBER, facilities);
-	reportQuery.find({
-		success: function(reports) {
-			var schoolCodes = [];
-			for(var i = 0; i < reports.length; i++) {
-				schoolCodes.push(reports[i].get(SCHOOL_CODE));
-			}
-			console.log("Schools found - " + schoolCodes);
-
-			var schoolQuery = new Parse.Query(SCHOOL_TABLE);
-			schoolQuery.containedIn(SCHOOL_CODE, schoolCodes);
-			schoolQuery.find({
-				success: function(schools) {
-					var locations = [];
-					for(var i=0; i < schools.length; i++) {
-						var schoolInstance = schools[i];
-						locations.push({"lat": schoolInstance.get(LATITUDE), "lng": schoolInstance.get(LONGITUDE)});						
+	if(facilities.length > 0) {
+		reportQuery.containedIn(FACILITY_NUMBER, facilities);
+		reportQuery.find({
+			success: function(reports) {
+				var schoolCodes = {};
+				for(var i = 0; i < reports.length; i++) {
+					var reportInstance = reports[i];
+					if(reportInstance.get(SCHOOL_CODE) in schoolCodes) {
+						schoolCodes[reportInstance.get(SCHOOL_CODE)] += 1;
+					} else {
+						schoolCodes[reportInstance.get(SCHOOL_CODE)] = 1;
 					}
-					callback.send({"locations": locations});
-				},
-				error: function(error) {
-					console.log("Error - " + error.code + " - " + error.message);
-					callback.send("{}");
+				}
+				var schoolQuery = new Parse.Query(SCHOOL_TABLE);
+				schoolQuery.containedIn(SCHOOL_CODE, Object.keys(schoolCodes));
+				schoolQuery.find({
+					success: function(schools) {
+						var schoolKeys = Object.keys(schoolCodes);
+						var locations = [];
+						for(var i =0 ; i < schools.length; i++) {
+							var schoolInstance = schools[i];
+							var count = schoolCodes[schoolInstance.get(SCHOOL_CODE)];
+							for(var j = 0 ; j < count; j++) {
+								locations.push({"lat": schoolInstance.get(LATITUDE), "lng": schoolInstance.get(LONGITUDE)});
+							}
+						}
+						callback.send({"locations": locations});
+					},
+					error: function(error) {
+						console.log("Error - " + error.code + " - " + error.message);
+						callback.send("{}");
+					}
+				});
+			},
+			error: function(error) {
+				console.log("Error - " + error.code + " - " + error.message);
+				callback.send("{}");
+			}
+		});
+	} else {
+		console.log("Specified all filters as FALSE. No data to work.");
+		callback.send("{}");
+	}
+
+}
+
+
+exports.fetchPinMapData = function(data, callback) {	
+	var schoolQuery = new Parse.Query(SCHOOL_TABLE);
+	schoolQuery.find({
+		success: function(schools) {
+			var schoolMap = {};
+			for(var i = 0; i < schools.length; i++) {
+				var schoolInstance = schools[i];
+				schoolMap[schoolInstance.get(SCHOOL_CODE)] = {"name" : schoolInstance.get(SCHOOL_NAME)};
+			}
+
+			var reportQuery = new Parse.Query(REPORT_TABLE);
+			reportQuery.find({
+				success: function(reports) {
+					for(var i = 0; i < reports.length; i++) {
+						var reportInstance = reports[i];
+						if(SCHOOL_CODE in reportInstance) {
+							var ref = schoolMap[reportInstance.get(SCHOOL_CODE)];
+
+						}
+					}
 				}
 			});
 		},
 		error: function(error) {
-			console.log("Error - " + error.code + " - " + error.message);
-			callback.send("{}");
+
 		}
 	});
 }
