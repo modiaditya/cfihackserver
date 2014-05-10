@@ -1,5 +1,3 @@
-SITA = {};
-
 SITA.initMenu = function() {
 	var showSection = function(sectionId) {
   	$('#report-section').hide();
@@ -8,10 +6,14 @@ SITA.initMenu = function() {
   	$('#' + sectionId).show();
   }
 
-  $.each(['report', 'timeline'], function(index, value) {
-    $('#' + value + '-link').click(function() {
-      showSection(value + '-section');
-    });
+  $('#report-link').click(function() {
+    showSection('report-section');
+    SITA.Report();
+  });
+
+  $('#timeline-link').click(function() {
+    showSection('timeline-section');
+    SITA.Timeline();
   });
 
   showSection('report-section');
