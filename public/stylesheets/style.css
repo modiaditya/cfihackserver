@@ -1,8 +1,40 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  text-align: center;
+  color: #666666;
+}
+
+ul {
+  list-style-type:none;
+  margin:0;
+  padding:0;
+}
+
+#menu {
+	margin: 20px;
+}
+
+#menu li {
+	display: inline;
+	cursor: pointer;
+	text-decoration: underline;
+	color: #666666;
+	font-size: large;
+	margin: 10px;
 }
 
 a {
   color: #00B7FF;
+}
+
+.hide {
+	visibility: hidden;
+}
+
+.main-section {
+	width: 960px;
+	height: 480px;
+	background: #dddddd;
+	display: inline-block;
+	padding: 20px;
 }
