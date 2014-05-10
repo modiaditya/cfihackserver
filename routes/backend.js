@@ -8,6 +8,11 @@ var FACILITY_NUMBER = 'facilityNumber';
 var PARAMETER_NUMBER = 'parameterNumber';
 var SCHOOL_CODE = 'schoolCode';
 var SCHOOL_NAME = 'schoolName';
+var CLUSTER_NAME = 'clusterName';
+var DISTRICT_NAME = 'districtName';
+var BLOCK_NAME = 'blockName';
+var VILLAGE_NAME = 'villageName';
+var PINCODE = 'pincode';
 
 var LATITUDE = 'latitude';
 var LONGITUDE = 'longitude';
@@ -202,10 +207,12 @@ exports.fetchPinMapData = function(data, callback) {
 					schoolMap[reportInstance.get(SCHOOL_CODE)] = {};
 				}
 				var ref = schoolMap[reportInstance.get(SCHOOL_CODE)];
-				var facilityString = FE_FACILITY_MAPPING[reportInstance.get(FACILITY_NUMBER)];
-				if(!(facilityString in ref)) {
-					ref[facilityString] = {"open": 0, "resolved": 0};
+				for(var key in FE_FACILITY_MAPPING) {
+					var facilityString = FE_FACILITY_MAPPING[key];
+					ref[facilityString] = { "open": 0, "resolved": 0 };
 				}
+
+				var facilityString = FE_FACILITY_MAPPING[reportInstance.get(FACILITY_NUMBER)];
 				if(reportInstance.get("status") == "OPEN") {
 					ref[facilityString]["open"] += 1;
 				} else {
@@ -240,50 +247,29 @@ exports.fetchPinMapData = function(data, callback) {
 	});
 }
 
-
-exports.fetchPinMapDataOld = function(data, callback) {	
+exports.fetchSchoolData = function(data, callback) {
+	var schoolCode = data.query.schoolCode;
 	var schoolQuery = new Parse.Query(SCHOOL_TABLE);
+	schoolQuery.equalTo(SCHOOL_CODE, schoolCode);
+
+	var finalOutput = {};
 	schoolQuery.find({
 		success: function(schools) {
-			var schoolMap = {};
-			for(var i = 0; i < schools.length; i++) {
-				var schoolInstance = schools[i];
-				schoolMap[schoolInstance.get(SCHOOL_CODE)] = {
-					"name" : schoolInstance.get(SCHOOL_NAME),
-					"schoolCode" : schoolInstance.get(SCHOOL_CODE),
-					"lat": schoolInstance.get(LATITUDE),
-					"lng": schoolInstance.get(LONGITUDE)
-				};
-			}
-
-			var reportQuery = new Parse.Query(REPORT_TABLE);
-			reportQuery.find({
-				success: function(reports) {
-					var arrayToReturn = [];
-					for(var i = 0; i < reports.length; i++) {
-						var reportInstance = reports[i];
-						var ref = schoolMap[reportInstance.get(SCHOOL_CODE)];
-						console.log("Ref is " + ref);
-						var facilityString = FE_FACILITY_MAPPING[reportInstance.get(FACILITY_NUMBER)];
-						if(!(facilityString in ref)) {
-							ref[facilityString] = {"open": 0, "resolved": 0};
-						}
-						if(reportInstance.get("status") == "OPEN") {
-							ref[facilityString]["open"] += 1;
-						} else {
-							ref[facilityString]["resolved"] += 1;
-						}
-						arrayToReturn.push(ref);
-					}
-					callback.send(schoolMap);
-				},
-				error: function(error) {
-					console.log("Report query failed in fetching pin data - " + error.message);
-				}
-			});
+			var schoolInstance = schools[0];
+			finalOutput[SCHOOL_NAME] = schoolInstance.get(SCHOOL_NAME);
+			finalOutput[SCHOOL_CODE] = schoolInstance.get(SCHOOL_CODE);
+			finalOutput[CLUSTER_NAME] = schoolInstance.get(CLUSTER_NAME);
+			finalOutput[DISTRICT_NAME] = schoolInstance.get(DISTRICT_NAME);
+			finalOutput[VILLAGE_NAME] = schoolInstance.get(VILLAGE_NAME);
+			finalOutput[CLUSTER_NAME] = schoolInstance.get(CLUSTER_NAME);
+			finalOutput[PINCODE] = schoolInstance.get(PINCODE);
+			//finalOutput[""] = schoolInstance.get();
+			//finalOutput[""] = schoolInstance.get();
+			//finalOutput[""] = schoolInstance.get();
 		},
 		error: function(error) {
-			console.log("Error in fetching pin data - " + error.message);
+			console.log("Error in fetching School Data - " + error.message);
 		}
 	});
+
 }
