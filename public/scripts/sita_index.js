@@ -27,6 +27,7 @@ SITA.initMenu = function() {
   })
 
   showSection('map-section');
+  SITA.Map();
 }
 
 $(document).ready(function(){

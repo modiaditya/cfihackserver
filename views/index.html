@@ -1,71 +1,5 @@
 <section class='main-section' id='map-section'>
 	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=visualization"></script>
-    <script>
-    	
-		function getData(url, callback){
-			$.get(url, function( data ) {
-		       console.log("Inside get" )
-		       var taxiData = [];
-		       for(var i in data.locations){
-		       		var location = data.locations[i] 
-		       		console.log(location)
-		       		taxiData[i] = new google.maps.LatLng(location.lat, location.lng);
-		    	}
-		    	console.log("returning")
-	       		callback(taxiData);	
-			});
-
-		}
-
-		function initialize() {
-			getData("/mock/heatmapmock.json", function(taxiData){
-				console.log(taxiData);
-				setMapData(taxiData);
-			});
-		}
-
-		function setMapData(taxiData){
-			var map, pointarray, heatmap;
-			var mapOptions = {
-			    zoom: 7,
-			    center: new google.maps.LatLng(21.84389, 70.57074),
-			    mapTypeId: google.maps.MapTypeId.SATELLITE
-		  	};
-		  	map = new google.maps.Map(document.getElementById('map-canvas'),
-			     mapOptions);
-
-			var pointArray = new google.maps.MVCArray(taxiData);
-
-			heatmap = new google.maps.visualization.HeatmapLayer({
-		    	data: pointArray
-		  	});
-			  heatmap.set('radius', 20);
-			  heatmap.setMap(map);
-		};
-
-		function setNewValues(){
-			getData("/mock/heatmapmock2.json", function(taxiData){
-				console.log(taxiData);
-				setMapData(taxiData);
-			});
-
-		}
-
-		function setValuesInMap(){
-			var barrier = document.getElementById("barrier").checked; //1
-			var toilets = document.getElementById("toilets").checked; // 2
-			var drinkingWater = document.getElementById("drinkingWater").checked; // 3
-			var playground = document.getElementById("playground").checked; //4
-			var library = document.getElementById("library").checked; //5
-			console.log(barrier + toilets + drinkingWater + playground + library);
-		}
-
-		google.maps.event.addDomListener(window, 'load', initialize);	
-
-    </script>
-<<<<<<< HEAD
-    <button onclick="setNewValues()">Load new map values</button>
-=======
     <form name=myform>
 		<input type="checkbox" id="barrier" onchange="setValuesInMap()">&nbsp;Barrier-free Access&nbsp;
 		<input type="checkbox" id="toilets" onchange="setValuesInMap()">&nbsp;Toilets&nbsp;
@@ -73,21 +7,11 @@
 		<input type="checkbox" id="playground" onchange="setValuesInMap()">&nbsp;Playground&nbsp;
 		<input type="checkbox" id="library" onchange="setValuesInMap()">&nbsp;Library
 	</form>	
->>>>>>> google maps marker
 	<div id="map-canvas" style="height: 100%;margin: 0px;padding: 0px"></div>
 </section>
 
 <section class='main-section' id='marker-section'>
-	
-    <script>
-	
-
-	
-	
-
-    </script>
 	<div id="map-marker-canvas" style="height: 100%;margin: 0px;padding: 0px"></div>
-
 </section>	
 
 <section class='main-section' id='chart-section'>
