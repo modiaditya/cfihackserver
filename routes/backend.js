@@ -281,14 +281,24 @@ exports.fetchSchoolData = function(data, callback) {
 					for(var i = 0 ; i < reports.length; i++) {
 						var reportInstance = reports[i];
 						var parameterQuery = new Parse.Query(PARAMETER_TABLE);
-						parameterQuery.equalTo('facilityId', reportInstance.get(FACILITY_NUMBER));
-						parameterQuery.equalTo('parameterId', reportInstance.get(PARAMETER_NUMBER));
+						//parameterQuery.equalTo(FACILITY_NUMBER, reportInstance.get(FACILITY_NUMBER));
+						parameterQuery.equalTo(PARAMETER_NUMBER, reportInstance.get(PARAMETER_NUMBER));
 						parameterQuery.find({	
-							success: function(parameter) {
+							success: function(parameter) {	
 								var map = {
 									"facilityName": FACILITY_MAPPING[reportInstance.get(FACILITY_NUMBER)],
-									"parameterName": parameter[0].get("description")
+									"comments": reportInstance.get("comments"),
 								};
+								var p = parameter[0];
+								if(p) {
+									map["parameterName"] = p.get("description");
+								}
+								var fileName = reportInstance.get("photo");
+								var map;
+								if(fileName) {
+									map["photoUrl"] = fileName.url();
+								}
+								console.log(map);
 								finalOutput["reports"].push(map);
 								callback.send(finalOutput);
 							},
