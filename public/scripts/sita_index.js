@@ -1,22 +1,22 @@
 SITA.initMenu = function() {
 	var showSection = function(sectionId) {
-  	$('#report-section').hide();
-  	$('#timeline-section').hide();
+  	$('#map-section').hide();
+  	$('#chart-section').hide();
 
   	$('#' + sectionId).show();
   }
 
-  $('#report-link').click(function() {
-    showSection('report-section');
+  $('#map-link').click(function() {
+    showSection('map-section');
     SITA.Report();
   });
 
-  $('#timeline-link').click(function() {
-    showSection('timeline-section');
-    SITA.Timeline();
+  $('#chart-link').click(function() {
+    showSection('chart-section');
+    SITA.Chart();
   });
 
-  showSection('report-section');
+  showSection('map-section');
 }
 
 $(document).ready(function(){
