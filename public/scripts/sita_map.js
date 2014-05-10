@@ -7,8 +7,6 @@ SITA.Map = function() {
 	
 }
 
-
-
 function getData(url, callback){
 	$.get(url, function( data ) {
        console.log("Inside get" )
@@ -50,4 +48,26 @@ function setValuesInMap(){
 	var playground = document.getElementById("playground").checked; //4
 	var library = document.getElementById("library").checked; //5
 	console.log(barrier + toilets + drinkingWater + playground + library);
+
+	var request = "heatMap?"
+	if(barrier){
+		request += "barrier=true&";
+	}
+	if(toilets){
+		request += "toilets=true&";	
+	}
+	if(drinkingWater){
+		request += "drinkingWater=true&";
+	}
+	if(playground){
+		request += "playground=true&"
+	}
+	if(library){
+		request += "library=true"
+	}
+
+	getData(request, function(taxiData){
+		setMapData(taxiData);
+	})
+
 }
