@@ -5,6 +5,7 @@ SITA.ChartUtil = function() {
             chart: { type: 'column' },
             title: { text: 'Open issues in ' + serverData.name + ' ' + serverData.type },
             xAxis: { type: 'category' },
+            yAxis: { title: { text: 'Number of open issues'}},
             legend: { enabled: false },
             plotOptions: {
                 series: {
