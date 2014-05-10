@@ -1,8 +1,24 @@
 {
 	"schoolRecords": [
-	{"lat":"21.737095", "lng":"70.297112", "schoolName": "Abc"},
-	{"lat":"21.486322", "lng":"70.953097", "schoolName": "XYZ"},
-	{"lat":"21.737095", "lng":"70.297112", "schoolName": "PQR"},
-	{"lat":"21.737095", "lng":"70.297112", "schoolName": "EFG"}
+	{	"lat":"21.737095", 
+		"lng":"70.297112", 
+		"schoolName": "Abc", 
+		"barrier" : {"open": 5, "close": 4}, 
+		"toilets" : {"open": 5, "close": 4},
+		"drinkingWater" : {"open": 5, "close": 4},
+		"playground" : {"open": 5, "close": 4},
+		"library" : {"open": 5, "close": 4},
+		"schoolCode" : "code123"
+	},
+	{	"lat":"21.486322", 
+		"lng":"70.953097", 
+		"schoolName": "xyz", 
+		"barrier" : {"open": 1, "close": 5}, 
+		"toilets" : {"open": 2, "close": 4},
+		"drinkingWater" : {"open": 3, "close": 3},
+		"playground" : {"open": 4, "close": 2},
+		"library" : {"open": 5, "close": 1},
+		"schoolCode" : "code124"
+	}
 	]
 }

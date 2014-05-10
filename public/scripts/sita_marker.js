@@ -16,14 +16,13 @@ SITA.Marker = function() {
 			var school = schoolRecordsData.schoolRecords[i];
 			var position = new google.maps.LatLng(school.lat, school.lng);
 			console.log(school)
-			var contentString = school.schoolName;
+			var contentString = getHtmlOutputForSchool(school);
 			var infowindow = new google.maps.InfoWindow({
       			content: contentString
   			});
 			var marker = new google.maps.Marker({       
         		position: position , 
-        		map: map,  // google.maps.Map 
-        		title: 'Title'      
+        		map: map   
     		}); 
 
 			google.maps.event.addListener(marker, 'click', function(contentString) {
@@ -34,4 +33,36 @@ SITA.Marker = function() {
 		}(contentString));
 	}
 	})	
+}
+
+function getHtmlOutputForSchool(school){
+	// var schoolHtmlOutput = '<div> ' + school.schoolName +
+	// 						'<table>'+ 
+	// 						'<tr><th> </th>'+
+	// 						'<th> Open </th>' +
+	// 						'<th> Close </th></tr>' +
+	// 						'<tr><td>Barrier Open </td>'+
+	// 						'<td> '+ school.barrier.open +' </td>' +
+	// 						'<td> '+ school.barrier.close +' </td></tr>' +
+	// 						'<tr><td>Toilets </td>'+
+	// 						'<td> '+ school.toilets.open +' </td>' +
+	// 						'<td> '+ school.toilets.close +' </td></tr>' +
+
+	// 						+'</table>'
+
+	// 						+'</div>'; 
+
+	var s =   '</div>'+
+		      '<h4 id="firstHeading" class="firstHeading">' + school.schoolName + '</h4>'+
+		      '<table cellspacing="10"><tr><th> </th><th>Open&nbsp;&nbsp;</th><th>Close</th></tr>'+
+		      '<tr><td>Barrier-free Access</td> <td> '+ school.barrier.open +' </td><td> '+ school.barrier.close +' </td></tr>'+ 
+		      '<tr><td>Toilets</td> <td> '+ school.toilets.open +' </td><td> '+ school.toilets.close +' </td></tr>'+ 
+		      '<tr><td>Drinking Water</td> <td> '+ school.drinkingWater.open +' </td><td> '+ school.drinkingWater.close +' </td></tr>'+ 
+		      '<tr><td>Playground</td> <td> '+ school.playground.open +' </td><td> '+ school.playground.close +' </td></tr>'+ 
+		      '<tr><td>Library</td> <td> '+ school.library.open +' </td><td> '+ school.library.close +' </td></tr>'+ 
+		      '</table>'+
+		      '<p><a href="getSchool?id='+school.schoolCode+ '">'+
+		      'View detailed reports</a> </p>' +
+		      '</div>';
+	return s;
 }
