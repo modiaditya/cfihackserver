@@ -8,7 +8,7 @@ SITA.initMenu = function() {
 
   $('#map-link').click(function() {
     showSection('map-section');
-    SITA.Report();
+    SITA.Map();
   });
 
   $('#chart-link').click(function() {
