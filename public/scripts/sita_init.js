@@ -1,7 +1,7 @@
 SITA = {
 	SUBTYPE_MAP : {
-        "state": "district",
-        "district": "village",
-        "village": "school"
+        "stateName": "districtName",
+        "districtName": "villageName",
+        "villageName": "schoolName"
       }
 }

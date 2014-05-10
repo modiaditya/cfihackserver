@@ -3,7 +3,6 @@ SITA.Chart = function() {
   var breadcrumbs = [];
 
   var refreshChart = function(type, name, subtype) {
-
     // var url = "/mock/chartmock.json";
     var url = 'chart?typeKey=' + type + '&typeValue=' + name + '&subType=' + subtype;
     $.get(url, function(data) {
@@ -22,7 +21,7 @@ SITA.Chart = function() {
       $('#subtype .typeahead').autocomplete({
         source: data.subtype.values,
         select: function( event, ui ) {
-          refreshChart(data.subtype.name, ui.item.value, SITA.SUBTYPE_MAP[ui.item.value]);
+          refreshChart(data.subtype.name, ui.item.value, SITA.SUBTYPE_MAP[data.subtype.name]);
         }
       });
 
