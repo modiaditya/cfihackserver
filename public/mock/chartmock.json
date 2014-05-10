@@ -1,6 +1,10 @@
 {
   "type": "state",
   "name": "Gujarat",
+  "subtype": {
+    "name": "district",
+    "values": ["Ahmedabad","Amreli","Anand","Banaskantha","Bharuch","Bhavnagar","Dahod","The Dangs","Gandhinagar","Gir Somnath","Jamnagar","Junagadh","Kutch","Kheda","Mehsana","Narmada","Navsari","Patan","Panchmahal","Porbandar","Rajkot","Sabarkantha","Surendranagar","Surat","Tapi","Vadodara","Valsad"]
+  },
   "facilities" : [
     {
       "name": "ramps",
