@@ -1,8 +1,14 @@
 
 var Parse = require('parse').Parse;
+
+var REPORT_TABLE = "report";
+var SCHOOL_TABLE = "school";
+
 var FACILITY_NUMBER = 'facilityNumber';
 var PARAMETER_NUMBER = 'parameterNumber';
 var SCHOOL_CODE = 'schoolCode';
+var LATITUDE = 'latitude';
+var LONGITUDE = 'longitude';
 
 var FACILITY_MAPPING = {
 	'1': 'Barrier-free Access',
@@ -43,8 +49,8 @@ Parse.Cloud.define("aggregateCountByType", function(request, response) {
 */
 
 exports.aggregateByAType = function(data, callback) {
-	var Report = Parse.Object.extend("report");
-	var School = Parse.Object.extend("school");
+	var Report = Parse.Object.extend(REPORT_TABLE);
+	var School = Parse.Object.extend(SCHOOL_TABLE);
 
 	var type = data.query.typeKey;
 	var name = data.query.typeValue;
@@ -103,26 +109,58 @@ exports.aggregateByAType = function(data, callback) {
 		},
 		error: function(error) {
 			console.log("Error - " + error.code + " - " + error.message);
+			callback.send("{}");
 		}
 	});
 
 }
 
 
+exports.fetchHeatMapCoordinates = function(data, callback) {
 
+	var Report = Parse.Object.extend(REPORT_TABLE);
+	var reportQuery = new Parse.Query(REPORT_TABLE);
+	var facilities = [];
+	if(data.query.barrier)
+		facilities.push(1);
+	if(data.query.toilets)
+		facilities.push(2);
+	if(data.query.drinkingWater)
+		facilities.push(3);
+	if(data.query.playground)
+		facilities.push(4);
+	if(data.query.library)
+		facilities.push(5);
 
+	reportQuery.containedIn(FACILITY_NUMBER, facilities);
+	reportQuery.find({
+		success: function(reports) {
+			var schoolCodes = [];
+			for(var i = 0; i < reports.length; i++) {
+				schoolCodes.push(reports[i].get(SCHOOL_CODE));
+			}
+			console.log("Schools found - " + schoolCodes);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+			var schoolQuery = new Parse.Query(SCHOOL_TABLE);
+			schoolQuery.containedIn(SCHOOL_CODE, schoolCodes);
+			schoolQuery.find({
+				success: function(schools) {
+					var locations = [];
+					for(var i=0; i < schools.length; i++) {
+						var schoolInstance = schools[i];
+						locations.push({"lat": schoolInstance.get(LATITUDE), "lng": schoolInstance.get(LONGITUDE)});						
+					}
+					callback.send({"locations": locations});
+				},
+				error: function(error) {
+					console.log("Error - " + error.code + " - " + error.message);
+					callback.send("{}");
+				}
+			});
+		},
+		error: function(error) {
+			console.log("Error - " + error.code + " - " + error.message);
+			callback.send("{}");
+		}
+	});
+}
