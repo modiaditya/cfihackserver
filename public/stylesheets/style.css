@@ -28,6 +28,18 @@ a {
   color: #00B7FF;
 }
 
+.feature-focus a {
+  color: #000000;
+}
+.feature-focus a:hover {
+  color: #000000;
+  text-decoration: none;
+}
+.feature-focus a:focus {
+  color: #000000;
+  text-decoration: none;
+}
+
 .hide {
 	visibility: hidden;
 }
@@ -65,7 +77,7 @@ a {
 =========================== */
 
 section.featured {
-	padding: 60px 0 60px;
+	padding: 30px 0 60px;
 	background: #70B9B0;
 	color: #fdfdfd;
 }

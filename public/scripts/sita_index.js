@@ -3,6 +3,7 @@ SITA.initMenu = function() {
   	$('#map-section').hide();
   	$('#chart-section').hide();
     $('#marker-section').hide();
+    $('#home-section').hide();
 
   	$('#' + sectionId).show();
   }
@@ -20,13 +21,19 @@ SITA.initMenu = function() {
   });
 
   $('#marker-link').click(function() {
-    console.log("inside marker link");
     showSection('marker-section');
     SITA.Marker();
     return false;
   })
 
-  showSection('map-section');
+  $('#home-link').click(function() {
+    showSection('home-section');
+    //SITA.Marker();
+    return false;
+  })
+
+
+  showSection('home-section');
   SITA.Map();
 }
 
