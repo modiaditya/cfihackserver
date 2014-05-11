@@ -280,14 +280,16 @@ exports.fetchSchoolData = function(data, callback) {
 			reportQuery.find({
 				success: function(reports) {
 					finalOutput["reports"] = [];
-					for(var i = 0 ; i < reports.length; i++) {
-						var reportInstance = reports[i];
+					
+					//for(var i = 0 ; i < reports.length; i++) {
+					//	var reportInstance = reports[i];
+						var reportInstance = reports[0];
+						if (reportInstance) {
 						var parameterQuery = new Parse.Query(PARAMETER_TABLE);
 						parameterQuery.equalTo(FACILITY_NUMBER, reportInstance.get(FACILITY_NUMBER));
 						parameterQuery.equalTo(PARAMETER_NUMBER, reportInstance.get(PARAMETER_NUMBER));
 						parameterQuery.find({	
 							success: function(parameter) {	
-								console.log("Parameter Query (********)");
 								var map = {
 									"facilityName": FACILITY_MAPPING[reportInstance.get(FACILITY_NUMBER)],
 									"comments": reportInstance.get("comments"),
@@ -301,22 +303,23 @@ exports.fetchSchoolData = function(data, callback) {
 								if(fileName) {
 									map["photoUrl"] = fileName.url();
 								}
-								console.log(map);
 								finalOutput["reports"].push(map);
+								callback.send(finalOutput);
 							},
 							error: function(error) {
 								console.log("Error fetching parameter in the fetch School data method");
 								callback.send("{}");
 							}
 						}); 						
+					//}
+					} else {
+						callback.send("{}");
 					}
 				},
 				error: function(error) {
 					console.log("Report query failed in fetch school data - " + error.message);
 				}
 			});
-			console.log("SOMETHING (********)");
-			callback.send(finalOutput);
 		},
 		error: function(error) {
 			console.log("Error in fetching School Data - " + error.message);
