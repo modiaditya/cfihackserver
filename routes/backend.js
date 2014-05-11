@@ -209,22 +209,24 @@ exports.fetchPinMapData = function(data, callback) {
 			var schoolMap = {};
 			for(var i = 0; i < reports.length; i++) {
 				var reportInstance = reports[i];
-				if(!(reportInstance.get(SCHOOL_CODE) in schoolMap)) {
-					schoolMap[reportInstance.get(SCHOOL_CODE)] = {};
-				}
-				var ref = schoolMap[reportInstance.get(SCHOOL_CODE)];
-				for(var key in FE_FACILITY_MAPPING) {
-					var facilityString = FE_FACILITY_MAPPING[key];
-					ref[facilityString] = { "open": 0, "resolved": 0 };
+				var schoolCode = reportInstance.get(SCHOOL_CODE);
+
+				if(!(schoolCode in schoolMap)) {
+					schoolMap[schoolCode] = {};
+					for(var key in FE_FACILITY_MAPPING) {
+						var facilityString = FE_FACILITY_MAPPING[key];
+						schoolMap[schoolCode][facilityString] = { "open": 0, "resolved": 0 };
+					}
 				}
 
 				var facilityString = FE_FACILITY_MAPPING[reportInstance.get(FACILITY_NUMBER)];
 				if(reportInstance.get("status") == "OPEN") {
-					ref[facilityString]["open"] += 1;
+					schoolMap[schoolCode][facilityString]["open"] += 1;
 				} else {
-					ref[facilityString]["resolved"] += 1;
+					schoolMap[schoolCode][facilityString]["resolved"] += 1;
 				}
 			}
+
 			var schoolQuery = new Parse.Query(SCHOOL_TABLE);
 			schoolQuery.containedIn(SCHOOL_CODE, Object.keys(schoolMap));
 			schoolQuery.find({
@@ -281,10 +283,11 @@ exports.fetchSchoolData = function(data, callback) {
 					for(var i = 0 ; i < reports.length; i++) {
 						var reportInstance = reports[i];
 						var parameterQuery = new Parse.Query(PARAMETER_TABLE);
-						//parameterQuery.equalTo(FACILITY_NUMBER, reportInstance.get(FACILITY_NUMBER));
+						parameterQuery.equalTo(FACILITY_NUMBER, reportInstance.get(FACILITY_NUMBER));
 						parameterQuery.equalTo(PARAMETER_NUMBER, reportInstance.get(PARAMETER_NUMBER));
 						parameterQuery.find({	
 							success: function(parameter) {	
+								console.log("Parameter Query (********)");
 								var map = {
 									"facilityName": FACILITY_MAPPING[reportInstance.get(FACILITY_NUMBER)],
 									"comments": reportInstance.get("comments"),
@@ -300,19 +303,20 @@ exports.fetchSchoolData = function(data, callback) {
 								}
 								console.log(map);
 								finalOutput["reports"].push(map);
-								callback.send(finalOutput);
 							},
 							error: function(error) {
 								console.log("Error fetching parameter in the fetch School data method");
 								callback.send("{}");
 							}
-						}); 
+						}); 						
 					}
 				},
 				error: function(error) {
 					console.log("Report query failed in fetch school data - " + error.message);
 				}
 			});
+			console.log("SOMETHING (********)");
+			callback.send(finalOutput);
 		},
 		error: function(error) {
 			console.log("Error in fetching School Data - " + error.message);
