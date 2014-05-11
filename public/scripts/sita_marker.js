@@ -29,10 +29,19 @@ SITA.Marker = function() {
     			return function(){
         		infowindow.setContent(contentString);//set the content
         		infowindow.open(map,this);
+
+        		// Handle school details link
+				$('.school-details-link').click(function() {
+					var schoolId = this.id;
+					new SITA.initMenu().showSection('school-section');
+					new SITA.SchoolReport(schoolId);
+				});
+
 			}
 		}(contentString));
 	}
 	})	
+
 }
 
 function getHtmlOutputForSchool(school){
@@ -61,7 +70,7 @@ function getHtmlOutputForSchool(school){
 		      '<tr><td>Playground</td> <td> '+ school.playground.open +' </td><td> '+ school.playground.resolved +' </td></tr>'+ 
 		      '<tr><td>Library</td> <td> '+ school.library.open +' </td><td> '+ school.library.resolved +' </td></tr>'+ 
 		      '</table>'+
-		      '<p><a href="getSchool?id='+school.schoolCode+ '">'+
+		      '<p><a class="school-details-link" id="' + school.schoolCode + '" href="#">' +
 		      'View detailed reports</a> </p>' +
 		      '</div>';
 	return s;

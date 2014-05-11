@@ -72,6 +72,10 @@ a {
 	color: #dddddd;
 }
 
+#school-reports td {
+  padding: 20px;
+}
+
 /*===========================
   --- Featured section ----
 =========================== */

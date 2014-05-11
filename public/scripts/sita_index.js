@@ -1,5 +1,8 @@
 SITA.initMenu = function() {
-	var showSection = function(sectionId) {
+
+  var _this = this;
+
+  this.showSection = function(sectionId) {
   	$('#map-section').hide();
   	$('#chart-section').hide();
     $('#marker-section').hide();
@@ -8,37 +11,33 @@ SITA.initMenu = function() {
   	$('#' + sectionId).show();
   }
 
-  $('#map-link').click(function() {
-    showSection('map-section');
+  $('.map-link').click(function() {
+    _this.showSection('map-section');
     SITA.Map();
     return false;
   });
 
-  $('#chart-link').click(function() {
-    showSection('chart-section');
+  $('.chart-link').click(function() {
+    _this.showSection('chart-section');
     SITA.Chart();
     return false;
   });
 
-  $('#marker-link').click(function() {
-    showSection('marker-section');
+  $('.marker-link').click(function() {
+    _this.showSection('marker-section');
     SITA.Marker();
     return false;
   })
 
-  $('#home-link').click(function() {
-    showSection('home-section');
-    //SITA.Marker();
+  $('.home-link').click(function() {
+    _this.showSection('home-section');
     return false;
   })
 
-
-  showSection('home-section');
-  SITA.Map();
 }
 
 $(document).ready(function(){
 
-  SITA.initMenu();
+  new SITA.initMenu().showSection('home-section');
 
 });
