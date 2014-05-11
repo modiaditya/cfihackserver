@@ -35,6 +35,7 @@ SITA.Marker = function() {
 					var schoolId = this.id;
 					new SITA.initMenu().showSection('school-section');
 					new SITA.SchoolReport(schoolId);
+					return false;
 				});
 
 			}

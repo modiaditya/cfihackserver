@@ -7,6 +7,7 @@ SITA.initMenu = function() {
   	$('#chart-section').hide();
     $('#marker-section').hide();
     $('#home-section').hide();
+    $('#school-section').hide();
 
   	$('#' + sectionId).show();
   }

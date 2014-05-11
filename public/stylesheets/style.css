@@ -72,6 +72,14 @@ a {
 	color: #dddddd;
 }
 
+#school-details {
+	margin: 0px auto;
+}
+
+#school-reports {
+	margin: 0px auto;
+}
+
 #school-reports td {
   padding: 20px;
 }

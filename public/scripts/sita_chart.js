@@ -39,6 +39,6 @@ SITA.Chart = function() {
 
   }
 
-  refreshChart('state', 'GUJRAT', 'districtName');
+  refreshChart('state', 'GUJARAT', 'districtName');
 
 }

@@ -23,21 +23,16 @@ SITA.SchoolReport = function(schoolId) {
     $('#school-pin-code').text(pincode);
     $('#school-state').text(state);
     $('#school-contact-details').text(contactDetails);
-    // $('#school-reports').text(reports);
 
-    for (var i in reports) {
-    	debugger;
-    	var facilityName = reports[i].facilityName;
-    	var comments = reports[i].comments;
-  		var photoUrl = reports[i].photoUrl;
+	var facilityName = reports[0].facilityName;
+	var photoUrl = reports[0].photoUrl;
 
-  		var photoEl = '<img src="' + photoUrl + '">';
-  		var photoColumn = '<td>' + photoEl + '</td>';
-  		var facilityNameColumn = '<td>' + facilityName + '</td>';
-  		var commentColumn = '<td>' + facilityName + '</td>';
-  		var tableRow = '<tr>' + photoColumn + facilityNameColumn + commentColumn + '</tr>';
-  		$('#school-reports').append(tableRow);
-    }
+	var photoEl = '<img src="' + photoUrl + '">';
+	var photoColumn = '<td>' + photoEl + '</td>';
+	var facilityNameColumn = '<td>' + facilityName + '</td>';
+	var tableRow = facilityNameColumn + photoColumn
+	$('#school-reports').empty();
+	$('#school-reports').append(tableRow);
 
   });
 };
